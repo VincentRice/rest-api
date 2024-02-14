@@ -28,7 +28,25 @@ export const findAll = async (): Promise<UnitUser[]> => Object.values(users);
 
 export const findOne = async (id: string): Promise<UnitUser> => users[id];
 
+export const searchUsers = async (name: string, email: string): Promise<UnitUser[]> => {
+    const allUsers = await findAll();
+
+    const filteredUsers = allUsers.filter(user =>
+        (!name || user.username.toLowerCase().includes(name.toLowerCase())) &&
+        (!email || user.email.toLowerCase().includes(email.toLowerCase()))
+    );
+
+    if (filteredUsers.length === 0) {
+        throw new Error(); 
+    }
+
+    return filteredUsers;
+};
+
+
 export const create = async (userData: UnitUser): Promise<UnitUser | null> => {
+
+
 
     let id = random()
 

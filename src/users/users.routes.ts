@@ -1,6 +1,7 @@
 import express, {Request, Response} from "express"
 import { UnitUser, User } from "./user.interface"
 import {StatusCodes} from "http-status-codes"
+import { searchUsers } from "./user.database";
 import * as database from "./user.database"
 
 export const userRouter = express.Router()
@@ -20,6 +21,25 @@ userRouter.get("/users", async (req : Request, res : Response) => {
     }
 })
 
+
+
+//Name and Email//
+userRouter.get("/users/search", async (req: Request, res: Response) => {
+    try {
+
+        const name = req.query.name as string;
+        const email = req.query.email as string;
+
+        const users = await searchUsers(name, email);
+
+        return res.status(StatusCodes.OK).json({ users });
+    } catch (error) {
+        return res.status(StatusCodes.NOT_FOUND).json( [] );
+    }
+});
+
+
+
 userRouter.get("/user/:id", async (req : Request, res : Response) => {
     try {
         const user : UnitUser = await database.findOne(req.params.id)
@@ -33,6 +53,8 @@ userRouter.get("/user/:id", async (req : Request, res : Response) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({error})
     }
 })
+
+
 
 userRouter.post("/register", async (req : Request, res : Response) => {
     try {
@@ -125,4 +147,8 @@ userRouter.delete("/user/:id", async (req : Request, res : Response) => {
 })
 
 
+
+function searchUsersByName(name: string) {
+    throw new Error("Function not implemented.")
+}
  

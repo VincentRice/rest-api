@@ -10,4 +10,6 @@ export interface UnitUser extends User {
 
 export interface Users {
     [key : string] : UnitUser
+
+
 }
